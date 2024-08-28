@@ -1,7 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
+import { useToast } from "@chakra-ui/react";
+import {
+  Button,
+  Center,
+  Image,
+  Heading,
+  Box,
+  Flex,
+  Input,
+} from "@chakra-ui/react";
 
 const PomodoroApp = () => {
-  const [time, setTime] = useState(60); // 25 minutes in seconds
+  const toast = useToast();
+  const [time, setTime] = useState(1500); // 25 minutes in seconds
   const [breakTime, setBreakTime] = useState(300); // 5 minutes in seconds
   const [isRunning, setIsRunning] = useState(false);
   const [isBreak, setIsBreak] = useState(false);
@@ -14,14 +25,38 @@ const PomodoroApp = () => {
       }, 1000);
     } else if (!isRunning && time !== 0) {
       clearInterval(timer);
+      toast({
+        title: "Reset or stop done!",
+        description: "Click on start!",
+        status: "success",
+        duration: 2000,
+        isClosable: true,
+        position: "top",
+      });
     }
 
     if (time === 0 && !isBreak) {
       setIsBreak(true);
       setTime(breakTime);
+      toast({
+        title: "Break time start!",
+        description: "it's break time!",
+        status: "success",
+        duration: 9000,
+        isClosable: true,
+        position: "top",
+      });
     } else if (time === 0 && isBreak) {
       setIsBreak(false);
-      setTime(60); // Reset to work session
+      setTime(1500); // Reset to work session
+      toast({
+        title: "Work time start!",
+        description: "it's time to Work",
+        status: "success",
+        duration: 9000,
+        isClosable: true,
+        position: "top",
+      });
     }
 
     return () => clearInterval(timer);
@@ -34,46 +69,70 @@ const PomodoroApp = () => {
   const resetTimer = () => {
     setIsRunning(false);
     setIsBreak(false);
-    setTime(60); // Reset to 25 minutes
+    setTime(1500); // Reset to 25 minutes
   };
 
   const formatTime = (seconds) => {
     const minutes = Math.floor(seconds / 60);
     const secs = seconds % 60;
-    return `${minutes}:${secs < 10 ? '0' : ''}${secs}`;
+    return `${minutes}:${secs < 10 ? "0" : ""}${secs}`;
   };
 
   return (
-    <div>
-      <h1>Pomodoro Timer</h1>
-      <div style={{ fontSize: '48px' }}>{formatTime(time)}</div>
-      <div>
-        <button onClick={toggleStartStop}>
-          {isRunning ? 'Stop' : 'Start'}
-        </button>
-        <button onClick={resetTimer}>Reset</button>
-      </div>
-      <div>
-        <label>Work Time (minutes):</label>
-        <input
+    <Box bgGradient="linear(to-r, gray.300, yellow.400, pink.200)" mb={"20px"}>
+      <Heading as="h1" size="4xl" mb={10}>
+        Pomodoro Timer!
+      </Heading>
+      <Center>
+        <Image
+          height={"350px"}
+          src="https://i.postimg.cc/qRYvhCn7/pomodoro.jpg"
+          alt="Dan Abramov"
+        />
+      </Center>
+      <div style={{ fontSize: "48px" }}>{formatTime(time)}</div>
+      <Center>
+        <Flex gap={10} mt={"20px"}>
+          <Button colorScheme="blue" onClick={toggleStartStop}>
+            {isRunning ? "Stop" : "Start"}
+          </Button>
+          <Button colorScheme="green" onClick={resetTimer}>
+            Reset
+          </Button>
+        </Flex>
+      </Center>
+
+      <Center>
+        <Heading size={"sm"} mt={"20px"}>
+          Work Time (in minutes):
+        </Heading>
+        <Input
+          width={"20%"}
+          borderColor={"green.500"}
+          mt={"10px"}
           type="number"
           value={time / 60}
           onChange={(e) => setTime(e.target.value * 60)}
         />
-      </div>
-      <div>
-        <label>Break Time (minutes):</label>
-        <input
+      </Center>
+
+      <br />
+      <Center>
+        <Heading size={"sm"}>Break Time (in minutes):</Heading>
+        <Input
+          width={"20%"}
+          borderColor={"green.500"}
+          mt={"10px"}
           type="number"
           value={breakTime / 60}
           onChange={(e) => setBreakTime(e.target.value * 60)}
         />
-      </div>
+      </Center>
       {/* Progress Indicator */}
-      <div>
-        <progress value={60 - time} max={60}></progress>
+      <div style={{ marginTop: "20px" }}>
+        <progress value={1500 - time} max={1500}></progress>
       </div>
-    </div>
+    </Box>
   );
 };
 
