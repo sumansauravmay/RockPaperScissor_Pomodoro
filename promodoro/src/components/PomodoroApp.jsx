@@ -12,8 +12,8 @@ import {
 
 const PomodoroApp = () => {
   const toast = useToast();
-  const [time, setTime] = useState(1500); // 25 minutes in seconds
-  const [breakTime, setBreakTime] = useState(300); // 5 minutes in seconds
+  const [time, setTime] = useState(1500);
+  const [breakTime, setBreakTime] = useState(300);
   const [isRunning, setIsRunning] = useState(false);
   const [isBreak, setIsBreak] = useState(false);
 
@@ -25,14 +25,6 @@ const PomodoroApp = () => {
       }, 1000);
     } else if (!isRunning && time !== 0) {
       clearInterval(timer);
-      toast({
-        title: "Reset or stop done!",
-        description: "Click on start!",
-        status: "success",
-        duration: 2000,
-        isClosable: true,
-        position: "top",
-      });
     }
 
     if (time === 0 && !isBreak) {
@@ -48,7 +40,7 @@ const PomodoroApp = () => {
       });
     } else if (time === 0 && isBreak) {
       setIsBreak(false);
-      setTime(1500); // Reset to work session
+      setTime(1500);
       toast({
         title: "Work time start!",
         description: "it's time to Work",
@@ -69,7 +61,7 @@ const PomodoroApp = () => {
   const resetTimer = () => {
     setIsRunning(false);
     setIsBreak(false);
-    setTime(1500); // Reset to 25 minutes
+    setTime(1500);
   };
 
   const formatTime = (seconds) => {
@@ -128,7 +120,7 @@ const PomodoroApp = () => {
           onChange={(e) => setBreakTime(e.target.value * 60)}
         />
       </Center>
-      {/* Progress Indicator */}
+     {/* progress indicator or icon */}
       <div style={{ marginTop: "20px" }}>
         <progress value={1500 - time} max={1500}></progress>
       </div>
